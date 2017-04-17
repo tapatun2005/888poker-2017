@@ -1,0 +1,10 @@
+.main-cards
+	each game in games
+		.main-cards__item.card.js-main-card(class="main_card_"+game.displayNum, data-main_card=game.data)
+			.main-card--shadow
+			.main-card--glow.js-glow
+			span.main-card--title.js-card-title= game.title
+			.main-card-wrap
+				.card-facedown.card-side.js-facedown
+				.card-faceup.card-side.js-faceup
+					img(src="images/cards_numbers/#{game.displayNum}"+2+".svg" alt="").card-faceup__image(class="main-card__faceup-"+game.displayNum)

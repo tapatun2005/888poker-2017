@@ -1,0 +1,203 @@
+doctype html
+html#single-page(data-lang=langCode)
+	head
+		title= games[1][langCode+"_meta_title"]
+		meta(name="description" content= games[1][langCode+"_meta_description"])
+		meta(charset='utf-8')
+
+		meta(name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui')
+		meta(name="mobile-web-app-capable" content="yes")
+		meta(name="apple-mobile-web-app-capable" content="yes")
+		meta(name="theme-color" content="#0a2655")
+		link(href="css/main.css" type="text/css" rel="stylesheet")
+		link(rel="canonical" href=rootUrl+"omaha.php")
+		| <!--[if lte IE 9]><link rel="stylesheet" type="text/css" href="css/ie-only.css"><![endif]-->
+		
+		link(rel="shortcut icon" href="//images.images4us.com/888poker/en/Favicon-poker_1451918736160_tcm1488-261970.ico")
+		//- FACEBOOK
+		meta(property="og:site_name" content="The Game")
+		meta(property="og:url" content=rootUrl+"omaha.php")
+		meta(property="og:type" content="website")
+		meta(property="og:title" content=games[1][langCode+"_meta_title"])
+		meta(property="og:image" content=rootUrl+"images/share-omaha.jpg")
+		meta(property="og:description" content=games[1][langCode+"_meta_description"])
+
+		//- TWITTER
+		meta(name="twitter:card" content="summary")
+		meta(name="twitter:site" content="@888poker")
+		meta(name="twitter:title" content= games[1][langCode+"_meta_title"])
+		meta(name="twitter:description" content=games[1][langCode+"_meta_description"])
+		meta(name="twitter:creator" content="@888poker")
+		meta(name="twitter:image" content=rootUrl+"images/share-omaha.jpg")
+
+	body
+		script.
+			  window.fbAsyncInit = function() {
+			    FB.init({
+			      appId      : '503992039800290',
+			      xfbml      : true,
+			      version    : 'v2.6'
+			    });
+			  };
+
+			  (function(d, s, id){
+			     var js, fjs = d.getElementsByTagName(s)[0];
+			     if (d.getElementById(id)) {return;}
+			     js = d.createElement(s); js.id = id;
+			     js.src = "//connect.facebook.net/en_US/sdk.js";
+			     fjs.parentNode.insertBefore(js, fjs);
+			   }(document, 'script', 'facebook-jssdk'));
+		#ie
+			.ie-wrap
+				p Please, update your browser to get full experience of this web application.
+				a(href="https://www.microsoft.com/en-gb/WindowsForBusiness/End-of-IE-support") Support for older versions of Internet Explorer ends. 
+				img(src="images/icon-ie.png", alt="")
+		#main
+			include ./includes/_loading.jade
+			.backgrounds
+				img(src="images/clouds/cloud-front.png", alt="").cloud--front
+				img(src="images/clouds/cloud-back.png", alt="").cloud--back
+				.gradient--blue
+				.noise
+			
+			include ./includes/main_cards.jade
+			include ./includes/nav.jade
+			#table
+				#poker_table.js-table
+					img(src="images/888poker.svg", alt="").table-logo
+					span#amount
+					.table-cards
+						each val in [32,31,30,29,28,27,26,25,24,23,22,21,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1]
+							.table__card.js-table-card(id="table__card-#{val}")
+								.table-card-wrap
+									.card-facedown.card-side.js-table-facedown
+									.card-faceup.card-side.js-table-faceup
+										img(src="", alt="").card-faceup__image(class="table-faceup-"+val)
+					
+					.table__buttons
+						img(src="images/dealer.svg", alt="").table__position.table__position--dealer.js-dealer
+						img(src="images/small_blind.svg", alt="").table__position.table__position--small_blind.js-small-blind
+						img(src="images/big_blind.svg", alt="").table__position.table__position--big_blind.js-big-blind
+						img(src="images/low_limit.svg", alt="").table__position.table__position--low_limit.js-low-limit
+						img(src="images/high_limit.svg", alt="").table__position.table__position--high_limit.js-high-limit
+					
+					.table__players
+						span.table__player.table__player--1= player+" 1"
+						span.table__player.table__player--2= player+" 2"
+						span.table__player.table__player--3= player+" 3"
+						span.table__player.table__player--4= player+" 4"
+						span.table__player.table__player--5= player+" 5"
+						span.table__player.table__player--6= player+" 6"
+
+					.table__stages
+							each stage in stages
+								.table__stage(data-stage="#{stage.stage_id}").js-table-stage
+									each step in stage.steps
+										span.table__step.js-table-step(data-step="#{step.step_id}" style="left:#{step.left}%; top: #{step.top}%")
+					.chips
+						each chip in [48,47,46,45,44,43,42,41,40,39,38,37,36,35,34,33,32,31,30,29,28,27,26,25,24,23,22,21,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1]
+							span.chip(id="chip-#{chip}")
+
+			#game
+				.game.js-game(id=games[1].data itemscope itemtype="http://schema.org/CreativeWork")
+
+					//- INTRO SECTION
+
+					section#js-section-intro.game__section.section__intro.js-section
+						.modal__description.game__stage.js-stage
+							span.eye.eye-info
+							h1.modal__description--title.js-stage-description(itemprop="name") #{games[1].title}
+							.stage__steps
+								each intro in games[1].intros
+									.nano.stage__step.js-step
+										.nano-content
+											h3.step__title= intro[langCode+"_title"]
+											.modal__description--text(itemprop="description")!= intro[langCode+"_description"]
+							.stage__navigation
+								span.btn.stage__nav__item.nav-prev.js-prev-intro <
+								span.btn.stage__nav__item.nav-next.js-next-intro
+									span.nav-next__span-1= next
+									span.nav-next__span-2 >
+
+					//- RULES SECTION
+
+					section#js-section-rules.game__section.section__rules.js-section
+						each stage in games[1].stages
+							.modal__description.game__stage.js-stage(class="#{stage.stage_id}" data-nav="#{stage.stage_id}")
+								span.eye.eye-info
+								h2.modal__description--title.js-stage-description #[span.modal__description--rank] #{games[1][langCode+"_title"]} #[span.modal__description--subtitle #{stage[langCode+"_title"]}]
+
+								//- top steps navigation
+								ul.steps__navigation.js-steps
+									each step in stage.steps
+										li.steps__nav__item.js-step-nav(data-step="#{step.step_id}" data-position="#{step.step_id}")
+									span.steps__nav__line.steps__nav__line--1.js-steps-line-innitial
+									span.steps__nav__line.steps__nav__line--2.js-steps-line
+
+								.stage__steps
+									.nano.stage__step.js-step(data-position="#{stage.step_id}")
+										.nano-content
+											h3.step__title= intro
+											.modal__description--text(itemprop="text")!= stage[langCode+"_intro"]
+									each step in stage.steps
+										.nano.stage__step.js-step(class="#{step.step_id}" data-nav="#{step.step_id}" data-position="#{step.step_id}")
+											.nano-content
+												h3.step__title= step[langCode+"_title"]
+												.modal__description--text(itemprop="text")!= step[langCode+"_description"]
+								.stage__navigation
+									span.btn.stage__nav__item.nav-prev.js-prev-rules <
+									span.btn.stage__nav__item.nav-next.js-next-rules
+										span.nav-next__span-1= next
+										span.nav-next__span-2 >
+
+
+						//- stages navigation
+						.game__stages__navigation.js-stages-navigation
+							.stages__nav__title #[span.stages__nav__title-inner= stage_title]
+							ul.game__stages.js-stages
+								each stage in games[1].stages
+									li.stage__item.js-stage-nav(data-stage="#{stage.stage_id}" data-position="#{stage.step_id}")
+										span.stage__item--title= stage[langCode+"_title"]
+								span.stages__nav__line.stages__nav__line--1.js-stage-initial-line
+								span.stages__nav__line.stages__nav__line--2.js-stage-line
+					
+					//- TIPS SECTION
+
+					section#js-section-tips.game__section.section__tips.js-section
+						.modal__description.game__stage.js-stage
+							span.eye.eye-info
+							h2.modal__description--title.js-stage-description #{games[1].title} #[span.modal__description--subtitle= tips_title]
+							.stage__steps
+								each tip in games[1].tips
+									.nano.stage__step.js-step
+										.nano-content
+											h3.step__title= tip[langCode+"_title"]
+											.modal__description--text(itemprop="text")!= tip[langCode+"_description"]
+							.stage__navigation
+								span.btn.stage__nav__item.nav-prev.js-prev-tips <
+								span.btn.stage__nav__item.nav-next.js-next-tips 
+									span.nav-next__span-1= next
+									span.nav-next__span-2 >
+
+					section#js-section-play.game__section.section__play.js-section
+						.modal__description.game__stage.js-stage
+							span.eye.eye-info
+							h2.modal__description--title.js-stage-description #{games[1][langCode+"_title"]} #[span.modal__description--subtitle= play]
+							.stage__steps
+									.nano.stage__step.js-step
+										.nano-content
+											.modal__description--text !{games[1][langCode+"_play"]}
+							.stage__navigation
+								span.btn.stage__nav__item.nav-prev.js-prev-play <
+								span.btn.btn--yellow.js-download= play_now
+
+			include ./includes/poker_hands.jade
+			include ./includes/tabs.jade
+			
+			a(href=rootUrl).logo-top
+				span The
+				h4.logo-top-title Game
+			
+			include ./includes/about.jade
+
+		include ./includes/scripts.jade

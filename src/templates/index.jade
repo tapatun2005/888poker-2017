@@ -1,0 +1,94 @@
+doctype html
+html#index-page(data-lang=langCode)
+	head
+		title= meta_title
+		meta(name="description" content=meta_description)
+		meta(charset='utf-8')
+
+		meta(name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui')
+		meta(name="mobile-web-app-capable" content="yes")
+		meta(name="apple-mobile-web-app-capable" content="yes")
+		meta(name="theme-color" content="#0a2655")
+		link(href="css/main.css" type="text/css" rel="stylesheet")
+
+		link(rel="canonical" href=rootUrl)
+		| <!--[if lte IE 9]><link rel="stylesheet" type="text/css" href="css/ie-only.css"><![endif]-->
+
+		link(rel="shortcut icon" href="//images.images4us.com/888poker/en/Favicon-poker_1451918736160_tcm1488-261970.ico")
+		
+		//- FACEBOOK
+		meta(property="og:site_name" content="The Game")
+		meta(property="og:url" content=rootUrl)
+		meta(property="og:type" content="website")
+		meta(property="og:title" content= meta_title)
+		meta(property="og:image" content=rootUrl+"images/facebook-share.jpg")
+		meta(property="og:description" content=meta_description)
+
+		//- TWITTER
+		meta(name="twitter:card" content="summary")
+		meta(name="twitter:site" content="@888poker")
+		meta(name="twitter:title" content= meta_title)
+		meta(name="twitter:description" content=meta_twitter)
+		meta(name="twitter:creator" content="@888poker")
+		meta(name="twitter:image" content=rootUrl+"images/facebook-share.jpg")
+
+
+
+	body
+		script.
+			  window.fbAsyncInit = function() {
+			    FB.init({
+			      appId      : '503992039800290',
+			      xfbml      : true,
+			      version    : 'v2.6'
+			    });
+			  };
+
+			  (function(d, s, id){
+			     var js, fjs = d.getElementsByTagName(s)[0];
+			     if (d.getElementById(id)) {return;}
+			     js = d.createElement(s); js.id = id;
+			     js.src = "//connect.facebook.net/en_US/sdk.js";
+			     fjs.parentNode.insertBefore(js, fjs);
+			   }(document, 'script', 'facebook-jssdk'));
+		#ie
+			.ie-wrap
+				p Please, update your browser to get full experience of this web application.
+				a(href="https://www.microsoft.com/en-gb/WindowsForBusiness/End-of-IE-support") Support for older versions of Internet Explorer ends. 
+				img(src="images/icon-ie.png", alt="")
+
+		#main
+			include ./includes/_loading.jade
+			.backgrounds
+				img(src="images/clouds/cloud-front.png", alt="").cloud--front
+				img(src="images/clouds/cloud-back.png", alt="").cloud--back
+				.gradient--blue
+				.noise
+			
+			include ./includes/main_cards.jade
+			include ./includes/nav.jade
+
+			#table
+			#game
+			include ./includes/poker_hands.jade
+			include ./includes/tabs.jade
+			.splash
+				span.splash-shadow
+				.logo
+					.logo--1 The
+					.letters
+						.letter.letter--1 G
+						.letter.letter--2 A
+						.letter.letter--3 M
+						.letter.letter--4 E
+				p.intro-text= splash_text
+				p.option-text= splash_instruction
+				a(href="#", data-main_cards="options").btn.btn--start.js-start= start
+			
+			a(href=rootUrl).logo-top
+				span The 
+				h1.logo-top-title Game
+			
+			include ./includes/about.jade
+
+	include ./includes/scripts.jade

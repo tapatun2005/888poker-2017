@@ -1,0 +1,6 @@
+ul.nav__list
+	each language in languages
+			li.nav__list__item.js-show-language
+				a(href="#{language.link}").nav__list__item--flex
+					img(src="images/#{language.flag}", alt="").menu-language__image
+					h4.nav__list__item-title= language.language
