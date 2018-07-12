@@ -16,12 +16,13 @@ var gulp = require('gulp'),
     fs = require("fs"),
     marked = require('marked'),
     replace = require('gulp-replace');
-    var convert = require('gulp-convert');
-    var concat = require('gulp-concat');
-    var json = require('gulp-json-wrapper');
-    var gzip = require('gulp-gzip');
-    var rename = require("gulp-rename");
-    var connect = require('gulp-connect-php');
+var convert = require('gulp-convert');
+var concat = require('gulp-concat');
+var json = require('gulp-json-wrapper');
+var gzip = require('gulp-gzip');
+var rename = require("gulp-rename");
+var connect = require('gulp-connect-php');
+var cmq = require('gulp-combine-media-queries');
 
 
 var csvFiles = {
@@ -37,7 +38,10 @@ var csvFiles = {
 
 var csvData = [];
 
-gulp.task('default', ['compile', 'watch', 'server', 'json', "connect"]);
+
+var folders = ["local", "amazon", "production"];
+
+gulp.task('default', ['compile', 'watch', 'server', 'json']);
 gulp.task('compile', ['scripts', 'markup', 'styles', 'assets', 'fonts', 'sounds']);
 gulp.task('scripts', ['script-compile']);
 
@@ -117,12 +121,35 @@ gulp.task('script-hints', function () {
     });
 });
 
+
+var scriptsHTML = [
+  "src/js/hammerjs.js",
+  "src/js/howler.min.js",
+  "src/js/jquery.nanoscroller.js",
+  "src/js/PxLoader.js",
+  "src/js/PxLoaderImage.js",
+  "src/js/social.js",
+  "src/js/z-app-html.js",
+]
+
+var scriptsPHP = [
+  "src/js/hammerjs.js",
+  "src/js/howler.min.js",
+  "src/js/jquery.nanoscroller.js",
+  "src/js/PxLoader.js",
+  "src/js/PxLoaderImage.js",
+  "src/js/social.js",
+  "src/js/z-app-php.js",
+]
+
+
+
 gulp.task('script-compile', ['script-hints'], function () {
   
   for (var i in csvData.languages) {
     var lang = csvData.languages[i].lang_code;
 
-    var scripts = gulp.src("src/js/*.js")
+    var scripts = gulp.src(scriptsPHP)
       .pipe(concat('scripts.js'))
       .pipe(rename('scripts.min.js'))
       .pipe(uglify());
@@ -149,6 +176,7 @@ gulp.task('markup', function () {
     csvData.games[i].de_play = marked(csvData.games[i].de_play);
     csvData.games[i].es_play = marked(csvData.games[i].es_play);
     csvData.games[i].ru_play = marked(csvData.games[i].ru_play);
+    csvData.games[i].dk_play = marked(csvData.games[i].dk_play);
     
 //intros
     intros = grep(csvData.intros, function(e) {
@@ -159,6 +187,7 @@ gulp.task('markup', function () {
       a.de_description = marked(a.de_description);
       a.es_description = marked(a.es_description);
       a.ru_description = marked(a.ru_description);
+      a.dk_description = marked(a.dk_description);
       return a;
     });
 
@@ -171,6 +200,7 @@ gulp.task('markup', function () {
       a.de_intro = marked(a.de_intro);
       a.es_intro = marked(a.es_intro);
       a.ru_intro = marked(a.ru_intro);
+      a.dk_intro = marked(a.dk_intro);
       return a;
     });
 
@@ -183,6 +213,7 @@ gulp.task('markup', function () {
       a.de_description = marked(a.de_description);
       a.es_description = marked(a.es_description);
       a.ru_description = marked(a.ru_description);
+      a.dk_description = marked(a.dk_description);
       return a;
     });
 
@@ -195,6 +226,7 @@ gulp.task('markup', function () {
     csvData.stages[i].de_intro = marked(csvData.stages[i].de_intro);
     csvData.stages[i].es_intro = marked(csvData.stages[i].es_intro);
     csvData.stages[i].ru_intro = marked(csvData.stages[i].ru_intro);
+    csvData.stages[i].dk_intro = marked(csvData.stages[i].dk_intro);
     steps = grep(csvData.steps, function(e) {
         return (e.stage_id === csvData.stages[i].stage_id);
     });
@@ -203,6 +235,7 @@ gulp.task('markup', function () {
       a.de_description = marked(a.de_description);
       a.es_description = marked(a.es_description);
       a.ru_description = marked(a.ru_description);
+      a.dk_description = marked(a.dk_description);
       return a;
     });
   }
@@ -213,6 +246,7 @@ gulp.task('markup', function () {
     csvData.hands[i].es_description = marked(csvData.hands[i].es_description);
     csvData.hands[i].de_description = marked(csvData.hands[i].de_description);
     csvData.hands[i].ru_description = marked(csvData.hands[i].ru_description);
+    csvData.hands[i].dk_description = marked(csvData.hands[i].dk_description);
   }
 
 //translations
@@ -224,6 +258,7 @@ gulp.task('markup', function () {
             .src('src/templates/*.jade')
             .pipe(data({
               rootUrl: csvData.languages[i].link,
+              logo: csvData.languages[i].logo_image,
               website_url: csvData.languages[i].website_link,
               langCode: lang,
               intro: csvData.languages[i].intro, 
@@ -251,14 +286,15 @@ gulp.task('markup', function () {
               meta_twitter: csvData.languages[i].meta_twitter,
               hands_title: csvData.languages[i].hands_title,
               stage_title: csvData.languages[i].stage_title,
-              player: csvData.languages[i].player
+              player: csvData.languages[i].player,
+              how_to_play_link: csvData.languages[i].how_to_play_link
             }))
             .pipe(data( function(e) {
               return csvData;
             }))
             .pipe(jade())
             .pipe(rename(function (path) {
-                path.extname = ".php"
+               path.extname = ".php"
             }))
 
     h
@@ -287,10 +323,7 @@ gulp.task('styles', function () {
         processImportFrom: ['!fonts.googleapis.com']
       }))
     h
-      .pipe(gulp.dest('build/'+ lang +'/css'))
-
-      .pipe(gzip())
-      .pipe(gulp.dest('production/'+ lang +'css'));
+      .pipe(gulp.dest('build/'+ lang +'/css'));
   }
 });
 
@@ -333,9 +366,9 @@ gulp.task('watch', function() {
   gulp.watch('src/sounds/**/*.*', ['sounds']);
 });
 
-gulp.task('connect', function() {
-    connect.server();
-});
+//gulp.task('connect', function() {
+//    connect.server();
+//});
 
 gulp.task('server', ['compile'], function () {
   return browserSync.init(['build/js/*.js', 'build/css/*.css', 'build/index.html'], {

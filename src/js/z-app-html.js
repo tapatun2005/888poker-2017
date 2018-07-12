@@ -515,7 +515,7 @@
         var data = "initial";
 
         //Load ajax for game HTML
-        $("#game").load(currentGameData + ".php #" + currentGameData, loadedGame);
+        $("#game").load(currentGameData + ".html #" + currentGameData, loadedGame);
 
         mainCardPostion(data);
         if (!mq.matches){
@@ -528,7 +528,7 @@
         removeActiveMainCards();
         showBackButton();
 
-        window.history.pushState({url: "" + currentGameData + ""}, currentGameData, currentGameData+'.php');
+        window.history.pushState({url: "" + currentGameData + ""}, currentGameData, currentGameData+'.html');
 
 
          googleMain("The Game - Type", " - CARD", currentGameData);
@@ -640,8 +640,8 @@
         $('.pdfs').removeClass('show');
         $('.nav__list').removeClass('show');
         setTimeout(function(){
-            TweenMax.to(".nav__item--menu", 1, {width:"65px", height: "30px", background: "rgba(8,40,71,0)", ease:Power2.easeInOut});
-            TweenMax.to(".nav__item--hand", 1, {width:"85px", height: "30px", background: "rgba(8,40,71,0)", ease:Power2.easeInOut});
+            //TweenMax.to(".nav__item--menu", 1, {width:"65px", height: "30px", background: "rgba(8,40,71,0)", ease:Power2.easeInOut});
+            TweenMax.to(".nav__item--hand", 1, {width:"95px", height: "30px", background: "rgba(8,40,71,0)", ease:Power2.easeInOut});
             TweenMax.to(".js-top-bg", 1, {width: "0", ease:Power2.easeInOut});
         }, 500);
         setTimeout(function(){
@@ -890,7 +890,7 @@
         //Load ajax for game HTML
         var currentGame = $(".js-game").attr('id');
         if (!$("#poker_table").length) {
-            $("#table").load(currentGame + ".php #poker_table", loadedTable);
+            $("#table").load(currentGame + ".html #poker_table", loadedTable);
         } else {
             TweenMax.to("#poker_table", 1, {opacity:"1", ease:Power0.easeInOut});
         }

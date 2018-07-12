@@ -1,14 +1,14 @@
 .nav
 	.nav__item.nav__item-top-left.nav__item--menu
-		span.nav__item__bg--top.nav__item__bg--top--left.js-top-bg
-		.nav__flex.nav__flex-top.nav__flex-menu.js-open-menu
+		//-span.nav__item__bg--top.nav__item__bg--top--left.js-top-bg
+		//- .nav__flex.nav__flex-top.nav__flex-menu(class=(langCode == "dk" ? "" : "js-open-menu"))
 			.nav__flex-item.nav__item-menu--icon
 				img(src="images/icon-globe.svg", alt="")
 				.btn.btn--close.btn--close__left.js-btn-close-menu
 			.nav__flex-item.nav__item-menu--title.nav__item-text.js-menu-title=langCode
 				
 
-		include ./menu.jade
+		//- include ./menu.jade
 		.nav__item-back(data-main_cards="options").nav__item-text.btn--back.back--left.js-back
 			.btn--back__text 
 				span.back--1 <
@@ -23,7 +23,7 @@
 		include ./poker_hands_menu.jade
 		.pdfs
 			a(href="http://www.888poker.com/en/poker%20hands%20ranking.pdf" target="_blank").pdf=download+ " |"
-			a(href="http://www.888poker.com/how-to-play-poker/hands/" target="_blank").pdf--lang= read_more
+			a(target="_blank" href=how_to_play_link).pdf--lang= read_more
 		.nav__item-back(data-main_cards="options").nav__item-text.btn--back.back--right.js-back-hand
 			.btn--back__text 
 				span.back--2= back
@@ -57,4 +57,4 @@
 
 	.logo__item.nav__item-bottom-right
 		a(href=website_url, target="_blank" itemprop="author")
-			img(src="images/888poker.png", alt="888poker").poker-logo
+			img(src="images/"+logo, alt="888poker").poker-logo
